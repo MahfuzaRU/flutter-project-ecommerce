@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:ecommerceapp/controllers/auth_controller.dart';
 import 'package:ecommerceapp/core/themes/app_themes.dart';
 import 'package:ecommerceapp/core/widgets/error_text.dart';
@@ -29,7 +31,7 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   void getUserData(WidgetRef ref, User data) async {
     user = await ref
-        .read(authControllProvider.notifier)
+        .watch(authControllProvider.notifier)
         .getUserData(data.uid)
         .first;
 
@@ -41,6 +43,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     return ref.watch(authStateChangesProvider).when(
         data: (data) {
+          getUserData(ref, data!);
           return MaterialApp.router(
             title: "Ecommerce App",
             debugShowCheckedModeBanner: false,

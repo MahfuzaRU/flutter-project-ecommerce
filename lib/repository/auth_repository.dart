@@ -15,7 +15,6 @@ final authRepositoryProvider = Provider((ref) => (AuthRepository(
     auth: ref.read(authProvider),
     googleSignIn: ref.read(googleSignInProvider))));
 
-
 class AuthRepository {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
@@ -42,9 +41,9 @@ class AuthRepository {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-
       UserCredential userCredential =
           await _auth.signInWithCredential(credential);
+
       late UserModel user;
       if (userCredential.additionalUserInfo!.isNewUser) {
         user = UserModel(
@@ -52,6 +51,8 @@ class AuthRepository {
           profilePic: userCredential.user!.photoURL ?? Constants.avatarDefault,
           uid: userCredential.user!.uid,
           isAuthenticated: true,
+          email: userCredential.user!.email ?? 'No Email',
+          phoneNumber: userCredential.user!.phoneNumber ?? 'No Phone Number',
         );
 
         await _users.doc(userCredential.user!.uid).set(user.toMap());

@@ -8,8 +8,25 @@ final productControllerProvider = StateNotifierProvider((ref) {
 });
 
 final getAllProductsProvider = StreamProvider<List<ProductModel>>((ref) {
-  return ref.watch(productControllerProvider.notifier).getCatagories();
+  return ref.watch(productControllerProvider.notifier).getAllProducts();
 });
+
+final searchProductsProvider = StreamProvider.family((ref, String query) {
+  return ref.watch(productControllerProvider.notifier).searchProducts(query);
+});
+
+final getProductByIdProvider = StreamProvider.family((ref, String id) {
+  return ref.watch(productControllerProvider.notifier).getProductById(id);
+});
+
+final getProductByCatagoryProvider =
+    StreamProvider.family((ref, String catagory) {
+  return ref
+      .watch(productControllerProvider.notifier)
+      .getProductByCatagory(catagory);
+});
+
+//controller
 
 class ProductController extends StateNotifier<bool> {
   final ProductRepository _productRepository;
@@ -18,7 +35,19 @@ class ProductController extends StateNotifier<bool> {
       : _productRepository = productRepository,
         super(false);
 
-  Stream<List<ProductModel>> getCatagories() {
+  Stream<List<ProductModel>> getAllProducts() {
     return _productRepository.getAllProducts();
+  }
+
+  Stream<List<ProductModel>> searchProducts(String query) {
+    return _productRepository.searchCommunites(query);
+  }
+
+  Stream<ProductModel> getProductById(String id) {
+    return _productRepository.getProductById(id);
+  }
+
+  Stream<List<ProductModel>> getProductByCatagory(String catagory) {
+    return _productRepository.getProductByCatagory(catagory);
   }
 }
